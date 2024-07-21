@@ -76,6 +76,8 @@ CREATE TABLE "prgrm_list" (
 	"prgrm_host"	varchar(200)		NULL,
 	"prgrm_target"	varchar(300)		NULL,
 	"relat_exhbt"	varchar(30)		NOT NULL,
+	"prgrm_strt_time"	time		NULL,
+	"prgrm_end_time"	time		NULL,
 	"prgrm_cd"	char(3)	DEFAULT 001	NOT NULL,
 	"musum_cd"	char(3)	DEFAULT 001	NOT NULL
 );
@@ -94,6 +96,10 @@ COMMENT ON COLUMN "prgrm_list"."prgrm_target" IS '교육, 이벤트에서 사용
 
 COMMENT ON COLUMN "prgrm_list"."relat_exhbt" IS '이벤트에서만 사용
 (프로그램 id가 들어감)';
+
+COMMENT ON COLUMN "prgrm_list"."prgrm_strt_time" IS '교육, 이벤트 데이터만';
+
+COMMENT ON COLUMN "prgrm_list"."prgrm_end_time" IS '교육, 이벤트 데이터만';
 
 COMMENT ON COLUMN "prgrm_list"."prgrm_cd" IS '001 : 전시
 002 : 교육
@@ -360,5 +366,166 @@ ALTER TABLE "rsvt_cd_info" ADD CONSTRAINT "PK_RSVT_CD_INFO" PRIMARY KEY (
 
 ALTER TABLE "musum_place_info" ADD CONSTRAINT "PK_MUSUM_PLACE_INFO" PRIMARY KEY (
 	"place_type_cd"
+);
+
+ALTER TABLE "musum_place" ADD CONSTRAINT "FK_musum_place_info_TO_musum_place_1" FOREIGN KEY (
+	"place_type_cd"
+)
+REFERENCES "musum_place_info" (
+	"place_type_cd"
+);
+
+ALTER TABLE "musum_place" ADD CONSTRAINT "FK_musum_info_TO_musum_place_1" FOREIGN KEY (
+	"musum_cd"
+)
+REFERENCES "musum_info" (
+	"musum_cd"
+);
+
+ALTER TABLE "prgrm_list" ADD CONSTRAINT "FK_prgrm_cd_info_TO_prgrm_list_1" FOREIGN KEY (
+	"prgrm_cd"
+)
+REFERENCES "prgrm_cd_info" (
+	"prgrm_cd"
+);
+
+ALTER TABLE "prgrm_list" ADD CONSTRAINT "FK_musum_info_TO_prgrm_list_1" FOREIGN KEY (
+	"musum_cd"
+)
+REFERENCES "musum_info" (
+	"musum_cd"
+);
+
+ALTER TABLE "obj_exhbt" ADD CONSTRAINT "FK_prgrm_list_TO_obj_exhbt_1" FOREIGN KEY (
+	"obj_exhbt_id"
+)
+REFERENCES "prgrm_list" (
+	"prgrm_id"
+);
+
+ALTER TABLE "obj_exhbt" ADD CONSTRAINT "FK_obj_list_TO_obj_exhbt_1" FOREIGN KEY (
+	"obj_id"
+)
+REFERENCES "obj_list" (
+	"obj_id"
+);
+
+ALTER TABLE "rsvt_user_list" ADD CONSTRAINT "FK_onlin_rsvt_TO_rsvt_user_list_1" FOREIGN KEY (
+	"rsvt_id"
+)
+REFERENCES "onlin_rsvt" (
+	"rsvt_id"
+);
+
+ALTER TABLE "rsvt_user_list" ADD CONSTRAINT "FK_user_info_list_TO_rsvt_user_list_1" FOREIGN KEY (
+	"user_id"
+)
+REFERENCES "user_info_list" (
+	"user_id"
+);
+
+ALTER TABLE "rsvt_user_list" ADD CONSTRAINT "FK_rsvt_cd_info_TO_rsvt_user_list_1" FOREIGN KEY (
+	"rsvt_cd"
+)
+REFERENCES "rsvt_cd_info" (
+	"rsvt_cd"
+);
+
+ALTER TABLE "rsvt_user_list" ADD CONSTRAINT "FK_prgrm_list_TO_rsvt_user_list_1" FOREIGN KEY (
+	"prgrm_id2"
+)
+REFERENCES "prgrm_list" (
+	"prgrm_id"
+);
+
+ALTER TABLE "onlin_rsvt" ADD CONSTRAINT "FK_prgrm_list_TO_onlin_rsvt_1" FOREIGN KEY (
+	"prgrm_id"
+)
+REFERENCES "prgrm_list" (
+	"prgrm_id"
+);
+
+ALTER TABLE "cntnts_scrp" ADD CONSTRAINT "FK_user_info_list_TO_cntnts_scrp_1" FOREIGN KEY (
+	"user_id"
+)
+REFERENCES "user_info_list" (
+	"user_id"
+);
+
+ALTER TABLE "cntnts_scrp" ADD CONSTRAINT "FK_dgt_cntnts_TO_cntnts_scrp_1" FOREIGN KEY (
+	"dgt_cntnts_id"
+)
+REFERENCES "dgt_cntnts" (
+	"dgt_cntnts_id"
+);
+
+ALTER TABLE "cntnts_scrp" ADD CONSTRAINT "FK_dgt_musum_info_TO_cntnts_scrp_1" FOREIGN KEY (
+	"dgt_musum_cd"
+)
+REFERENCES "dgt_musum_info" (
+	"dgt_musum_cd"
+);
+
+ALTER TABLE "cntnts_scrp" ADD CONSTRAINT "FK_user_gale_TO_cntnts_scrp_1" FOREIGN KEY (
+	"user_gale_id"
+)
+REFERENCES "user_gale" (
+	"user_gale_id"
+);
+
+ALTER TABLE "cntnts_like" ADD CONSTRAINT "FK_user_info_list_TO_cntnts_like_1" FOREIGN KEY (
+	"user_id"
+)
+REFERENCES "user_info_list" (
+	"user_id"
+);
+
+ALTER TABLE "cntnts_like" ADD CONSTRAINT "FK_dgt_musum_info_TO_cntnts_like_1" FOREIGN KEY (
+	"dgt_musum_cd"
+)
+REFERENCES "dgt_musum_info" (
+	"dgt_musum_cd"
+);
+
+ALTER TABLE "cntnts_like" ADD CONSTRAINT "FK_dgt_cntnts_TO_cntnts_like_1" FOREIGN KEY (
+	"dgt_cntnts_id"
+)
+REFERENCES "dgt_cntnts" (
+	"dgt_cntnts_id"
+);
+
+ALTER TABLE "cntnts_like" ADD CONSTRAINT "FK_user_gale_TO_cntnts_like_1" FOREIGN KEY (
+	"user_gale_id"
+)
+REFERENCES "user_gale" (
+	"user_gale_id"
+);
+
+ALTER TABLE "user_log_hist" ADD CONSTRAINT "FK_user_info_list_TO_user_log_hist_1" FOREIGN KEY (
+	"user_id"
+)
+REFERENCES "user_info_list" (
+	"user_id"
+);
+
+ALTER TABLE "user_log_hist" ADD CONSTRAINT "FK_admin_info_list_TO_user_log_hist_1" FOREIGN KEY (
+	"admin_id"
+)
+REFERENCES "admin_info_list" (
+	"admin_id"
+);
+
+ALTER TABLE "user_gale_in_obj" ADD CONSTRAINT "FK_obj_list_TO_user_gale_in_obj_1" FOREIGN KEY (
+	"obj_id"
+)
+REFERENCES "obj_list" (
+	"obj_id"
+);
+
+ALTER TABLE "user_gale_in_obj" ADD CONSTRAINT "FK_user_gale_TO_user_gale_in_obj_1" FOREIGN KEY (
+	"user_gale_id"
+)
+REFERENCES "user_gale" (
+	"user_gale_id"
 );
 
